@@ -9,6 +9,9 @@ namespace UserMDS.Data
         {
 
         }
-        public DbSet<AddUKGProdCenterModel> UKG_Production_Centers { get; set; }
+        public DbSet<UKGProdCenterModel> UKG_Production_Centers { get; set; }
+       
+
+        public DbSet<UserMaintenanceMasterDataModel> User_Maintenance_Master_Data { get; set; }
     }
 }

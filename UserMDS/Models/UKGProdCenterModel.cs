@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserMDS.Models
 {
+    
     public class UKGProdCenterModel
     {
  
@@ -9,7 +11,7 @@ namespace UserMDS.Models
         public string Plant { get; set; }
         public string Cost_Center { get; set; }
         public int Shift { get; set; }
-        public string Updated_By { get; set; }
-        public DateTime Updated_Date { get; set; }
+        public string? Updated_By { get; set; }
+        public DateTime? Updated_Date { get; set; }
     }
 }

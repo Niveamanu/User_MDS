@@ -1,22 +1,32 @@
-﻿using ExcelDataReader;
+﻿using AutoMapper;
+using ExcelDataReader;
 using Microsoft.AspNetCore.Mvc;
-using SalesRfp.Models.Domain;
-using SalesRfp.Models;
+using Microsoft.EntityFrameworkCore;
+using UserMDS.Data;
 using UserMDS.Models;
+using UserMDS.Models.DTO;
 using UserMDS.Repositories;
 
 namespace SalesRfp.Controllers
 {
     public class UserMDSController : Controller
     {
-        private readonly UserMDSRepository userMDSRepository;  
-        public UserMDSController(IUserMDSRepository userMDSRepository)
+        private readonly UserMDSRepository userMDSRepository;
+        private readonly UserMDSDbContext userMDSDbContext;
+
+        private readonly IMapper mapper;
+        public UserMDSController(IUserMDSRepository userMDSRepository,UserMDSDbContext userMDSDbContext,IMapper mapper)
         {
             this.userMDSRepository = (UserMDSRepository?)userMDSRepository;
+            this.userMDSDbContext = userMDSDbContext;
+            this.mapper = mapper;
+           
         }
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+           
+            return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
         }
 
         [HttpPost]
@@ -58,6 +68,7 @@ namespace SalesRfp.Controllers
                                     {
                                         Plant = dataTable.Rows[i][0].ToString(),
                                         Cost_Center = dataTable.Rows[i][1].ToString(),
+                                        Shift = Convert.ToInt32( dataTable.Rows[i][2]),
                                          
                                          
                                     });
@@ -73,22 +84,27 @@ namespace SalesRfp.Controllers
                     {
                         for (int i = 0; i < input.Count; i++)
                         {
-                            var ukgprodCenter = new AddUKGProdCenterModel();
+                            var ukgprodCenter = new AddUKGProdCenterDTO();
                             {
                                 ukgprodCenter.Plant = input[i].Plant;
                                 ukgprodCenter.Cost_Center = input[i].Cost_Center;
-                                
-                                
+                                ukgprodCenter.Shift = input[i].Shift;   
+                                ukgprodCenter.Updated_Date= DateTime.Now;
+
+
                             }
-                             var result = await userMDSRepository.CreateUKGProdCenterAsync(ukgprodCenter);
+                            var ukgProdModelDomain = mapper.Map<UKGProdCenterModel>(ukgprodCenter);
+                             var result = await userMDSRepository.CreateUKGProdCenterAsync(ukgProdModelDomain);
                         }
                     }
 
                 }
 
             }
-
-            return View(input);
+           
+            return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
         }
+
+       
     }
 }

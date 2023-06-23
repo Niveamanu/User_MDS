@@ -1,9 +1,10 @@
 ﻿using UserMDS.Models;
+using UserMDS.Models.DTO;
 
 namespace UserMDS.Repositories
 {
     public interface IUserMDSRepository
     {
-        Task<AddUKGProdCenterModel> CreateUKGProdCenterAsync(AddUKGProdCenterModel addUKGProdCenterModel);
+        Task<UKGProdCenterModel> CreateUKGProdCenterAsync(UKGProdCenterModel UKGProdCenterModel);
     }
 }

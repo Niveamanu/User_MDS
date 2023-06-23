@@ -1,5 +1,6 @@
 ﻿using UserMDS.Data;
 using UserMDS.Models;
+using UserMDS.Models.DTO;
 
 namespace UserMDS.Repositories
 {
@@ -10,11 +11,11 @@ namespace UserMDS.Repositories
         {
             this.userMDSDbContext = userMDSDbContext;
         }
-        public async Task<AddUKGProdCenterModel> CreateUKGProdCenterAsync(AddUKGProdCenterModel uKGProdCenterModel)
+        public async Task<UKGProdCenterModel> CreateUKGProdCenterAsync(UKGProdCenterModel uKGProdCenterModel)
         {
-            uKGProdCenterModel.Updated_Date = DateTime.Now;
+             
             await userMDSDbContext.AddAsync(uKGProdCenterModel);
-        
+
             await userMDSDbContext.SaveChangesAsync();
             return uKGProdCenterModel;
         }

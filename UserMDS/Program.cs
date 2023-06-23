@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using UserMDS.Data;
+using UserMDS.Mappings;
 using UserMDS.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,28 @@ builder.Services.AddControllers();
 
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+builder.Services.AddCors(corsOption => corsOption.AddPolicy(
+    "ReportingCORSPolicy",
+    corsBuilder =>
+    {
+        corsBuilder.WithOrigins("https://localhost:44338")
+                    .AllowCredentials()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+
+        corsBuilder.WithOrigins("http://bfadev-rfp.readypac.net")
+        .AllowCredentials()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+
+        corsBuilder.WithOrigins("http://bfa-rfp.readypac.net")
+        .AllowCredentials()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    })
+);
 
 var app = builder.Build();
 
