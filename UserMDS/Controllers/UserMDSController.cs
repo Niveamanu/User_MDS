@@ -89,7 +89,7 @@ namespace SalesRfp.Controllers
                                 ukgprodCenter.Plant = input[i].Plant;
                                 ukgprodCenter.Cost_Center = input[i].Cost_Center;
                                 ukgprodCenter.Shift = input[i].Shift;   
-                                ukgprodCenter.Updated_Date= DateTime.Now;
+                                ukgprodCenter.Modified_Date= DateTime.Now;
 
 
                             }
@@ -101,8 +101,9 @@ namespace SalesRfp.Controllers
                 }
 
             }
-           
-            return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
+
+            return Redirect("/GridData?Table_Name=UKG_Production_Centers");
+                //View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
         }
 
        
