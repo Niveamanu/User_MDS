@@ -1,32 +1,15 @@
 ﻿@model IList<UserMDS.Models.UserMaintenanceMasterDataModel>
  
-@*<form method="post" enctype="multipart/form-data" asp-controller="UserMDS" asp-action="Index">
 
-    <div class="form-group">
-        <div class="col-md-10">
-            <p>Upload a file</p>
-            <input class="form-control" type="file" name="files" multiple />
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-10">
-            <input class="btn btn-success" type="submit" value="Upload" />
-        </div>
-    </div>
-     
-</form>
-
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <p class="lead">
-        Upload the file with the items to start the RFP Creation.<a target="_blank" href="../../Templates/UKGTemplate.xlsx">Download Template</a>
-    </p>
-</div>*@
 
 <form method="post" enctype="multipart/form-data" asp-controller="UserMDS" asp-action="Index"  >
 
-<table  class="table">
+<table  class="table DashBoard">
     <thead>
         <tr>
+            <th>
+                S.No
+            </th>
             <th>
                Master Data Source
             </th>
@@ -41,8 +24,14 @@
         </tr>
     </thead>
     <tbody>
+        @{
+
+            int counter = 1; 
       @foreach (var item in Model ) {  
             <tr>
+                <td>
+                   @counter 
+                </td>
                 <td>
                         @Html.DisplayFor(modelItem => item.Data_Src_Name)
                 </td>
@@ -52,25 +41,46 @@
                         <input class="btn btn-success" type="submit" value="Upload"   />
             </td>
                 <td>
-                        <a target="_blank" href="../templates/@Html.DisplayFor(modelItem => item.Excel_Name)">@Html.DisplayFor(modelItem => item.Data_Src_Name) Template</a>
+                        <a target="_blank" href="../templates/@Html.DisplayFor(modelItem => item.Template_Name)">@Html.DisplayFor(modelItem => item.Data_Src_Name) Template</a>
                 </td>
                 <td>
                         <a class="btn btn-info" href="/GridData?Table_Name=@item.Table_Name">View</a>
                 </td>
                 
             </tr>
+                    counter++;
         }
+                // Increment the counter variable after each iteration
+            }
     </tbody>
 </table> 
 </form>
  
 
+<script type="text/javascript">
+    $(document).ready(function () {
 
-              <script>
-    function displayAlert() {
-        
-        alert('File uploaded successfully!');
+        let table = new DataTable('.DashBoard', {
+            dom: 'Bfrtip',
+            buttons: [
+
+                'excelHtml5'
+
+
+            ]
+        });
+
+
+    });
+
+</script>
+
+<script>
+    @if (ViewData["ExceptionMessage"] != null)
+    {
+        var exceptionMessage = ViewData["ExceptionMessage"].ToString();
+        @:alert("@exceptionMessage");
     }
-              </script>
+</script>
 
  

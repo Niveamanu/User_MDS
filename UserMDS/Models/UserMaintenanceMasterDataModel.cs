@@ -7,7 +7,7 @@
 
         public string Table_Name { get; set; }
 
-        public string Excel_Name { get; set; }
+        public string Template_Name { get; set; }   
 
     }
 }

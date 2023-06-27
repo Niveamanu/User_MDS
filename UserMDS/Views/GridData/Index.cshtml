@@ -1,18 +1,27 @@
-﻿@using UserMDS.Models
-@model IList<UKGProdCenterModel>
+﻿ 
 
-
-@if (Model != null)
-{
+ 
     <hr />
     <div class="row">
         <div class="col-sm-12">
-            @if (Model != null)
+            @if (ViewData["parameterValue"] !=null)
             {
-                @await Html.PartialAsync("_UKGDataGrid", Model)
+                var dataSource = ViewData["parameterValue"].ToString();
+                if(dataSource=="UKG_Production_Centers")
+                {
+                    
+                @await Html.PartialAsync("_UKGDataGrid")
+                ;
+            }
+            else
+            {
+                @await Html.PartialAsync("_CompanyEmployeeDataGrid")
+                ;
+            }
+            
+                
             }
 
         </div>
     </div>
 
-}

@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @using UserMDS.Models
-@model IEnumerable<UKGProdCenterModel>
+@model IEnumerable<CompanyEmployeeBenefitsModel>
 @{
     Layout = null;
 }
@@ -27,13 +27,18 @@
 
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade  overflow-auto show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-            <table class="UKGData table table-hover">
+            <table class="CompanyEmployeeBenefits table table-hover">
                 <thead class="thead-light">
                     <tr>
                         <th>S.No</th>
-                        <th>Plant</th>
-                        <th>Cost Center</th>
-                        <th>Shift</th>
+                        <th>Plant Unique</th>
+                        <th>Work Home Perc</th>
+                        <th>Insurance Perc</th>
+                        <th>Pr Tax perc</th>
+                        <th>pto perc</th>
+                        <th>adj factor perc</th>
+                        <th>tot benefits perc</th>
+                       
 
 
                     </tr>
@@ -41,13 +46,18 @@
                 @{
 
                     int counter = 1;
-                    @foreach (UKGProdCenterModel result in Model)
+                @foreach (CompanyEmployeeBenefitsModel result in Model)
                 {
                     <tr>
                     <td>@counter</td>
-                        <td>@result.Plant</td>
-                        <td>@result.Cost_Center</td>
-                        <td>@result.Shift</td>
+                        <td>@result.plant_unique</td>
+                        <td>@result.work_home_perc</td>
+                        <td>@result.insurance_perc</td>
+                        <td>@result.pr_tax_perc</td>
+                        <td>@result.pto_perc</td>
+                        <td>@result.adj_factor_perc</td>
+                        <td>@result.tot_benefits_perc</td>
+
 
                     </tr>
                         counter++;
@@ -62,7 +72,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        let table = new DataTable('.UKGData', {
+        let table = new DataTable('.CompanyEmployeeBenefits', {
             dom: 'Bfrtip',
             buttons: [
 
@@ -71,7 +81,7 @@
 
             ]
         });
-       
+
 
     });
 

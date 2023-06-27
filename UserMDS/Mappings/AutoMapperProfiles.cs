@@ -9,6 +9,7 @@ namespace UserMDS.Mappings
         public AutoMapperProfiles()
         {
             CreateMap<UKGProdCenterModel, AddUKGProdCenterDTO>().ReverseMap();
+            CreateMap<CompanyEmployeeBenefitsModel, AddCompanyEmployeeBenefitsDTO>().ReverseMap();
         }
     }
 }

@@ -6,5 +6,6 @@ namespace UserMDS.Repositories
     public interface IUserMDSRepository
     {
         Task<UKGProdCenterModel> CreateUKGProdCenterAsync(UKGProdCenterModel UKGProdCenterModel);
+        Task<CompanyEmployeeBenefitsModel> CreateCompanyEmployeeBenefitsAsync(CompanyEmployeeBenefitsModel companyEmployeeBenefitsModel);
     }
 }
