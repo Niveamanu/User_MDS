@@ -31,8 +31,11 @@ namespace UserMDS.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(IFormFile files)
+        public async Task<IActionResult> Index( IFormFile files, string button)
         {
+          
+            
+
             var ukgProdCenterInput = new List<UKGProdCenterModel>();
             var companyEmployeeBenefitsInput = new List<CompanyEmployeeBenefitsModel>();
             var dataSource = "";
@@ -70,6 +73,16 @@ namespace UserMDS.Controllers
                             var dataTable = dataSet.Tables[0];
                             int columnCount = reader.FieldCount;
                             dataSource = dataTable.Rows[0][0].ToString();
+                            //template check 
+                            if (button == "UKG")
+                            {
+                                if(dataTable.Rows[0][0].ToString() != "UKG Production Center")
+                                {
+                                    ViewData["TemplateMismatch"] ="Please choose the proper template for UKG Production center";
+                                    return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
+
+                                }
+                            }
                             if (dataTable != null)
                             {
                                 for (var i = 2; i < dataTable.Rows.Count; i++)
