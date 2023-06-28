@@ -5,22 +5,23 @@ using Microsoft.EntityFrameworkCore;
 using UserMDS.Data;
 using UserMDS.Models;
 using UserMDS.Models.DTO;
-using UserMDS.Repositories;
+using UserMDS.Repositories; 
 
-namespace SalesRfp.Controllers
+namespace UserMDS.Controllers
 {
     public class UserMDSController : Controller
     {
         private readonly UserMDSRepository userMDSRepository;
         private readonly UserMDSDbContext userMDSDbContext;
-
+        
         private readonly IMapper mapper;
+       
         public UserMDSController(IUserMDSRepository userMDSRepository, UserMDSDbContext userMDSDbContext, IMapper mapper)
         {
             this.userMDSRepository = (UserMDSRepository?)userMDSRepository;
             this.userMDSDbContext = userMDSDbContext;
             this.mapper = mapper;
-
+         
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -81,12 +82,13 @@ namespace SalesRfp.Controllers
                                                 Plant = dataTable.Rows[i][0].ToString(),
                                                 Cost_Center = dataTable.Rows[i][1].ToString(),
                                                 Shift = Convert.ToInt32(dataTable.Rows[i][2]),
+                                                
 
 
                                             });
                                         }
                                         catch(Exception ex) {
-                                            ViewData["ExceptionMessage"] = ex.InnerException.Message;
+                                            ViewData["ExceptionMessage"] = ex.Message;
                                             return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
 
                                         }
@@ -96,15 +98,27 @@ namespace SalesRfp.Controllers
                                     {
                                         try
                                         {
+                                            string whp = dataTable.Rows[i][1]?.ToString();
+                                            double? _whp = string.IsNullOrEmpty(whp) ? (double?)null : Convert.ToDouble(whp);
+                                            string ip = dataTable.Rows[i][2]?.ToString();
+                                            double? _ip = string.IsNullOrEmpty(ip) ? (double?)null : Convert.ToDouble(ip);
+                                            string ptp = dataTable.Rows[i][3]?.ToString();
+                                            double? _ptp = string.IsNullOrEmpty(ptp) ? (double?)null : Convert.ToDouble(ptp);
+                                            string pp = dataTable.Rows[i][4]?.ToString();
+                                            double? _pp = string.IsNullOrEmpty(pp) ? (double?)null : Convert.ToDouble(pp);
+                                            string afp = dataTable.Rows[i][5]?.ToString();
+                                            double? _afp = string.IsNullOrEmpty(afp) ? (double?)null : Convert.ToDouble(afp);
+                                            string tbp = dataTable.Rows[i][6]?.ToString();
+                                            double? _tbp = string.IsNullOrEmpty(tbp) ? (double?)null : Convert.ToDouble(tbp);
                                             companyEmployeeBenefitsInput.Add(new CompanyEmployeeBenefitsModel
                                             {
                                                 plant_unique = dataTable.Rows[i][0].ToString(),
-                                                work_home_perc = (double?)dataTable.Rows[i][1],
-                                                insurance_perc = (double?)dataTable.Rows[i][2],
-                                                pr_tax_perc = (double?)dataTable.Rows[i][3],
-                                                pto_perc = (double?)dataTable.Rows[i][4],
-                                                adj_factor_perc = (double?)dataTable.Rows[i][5],
-                                                tot_benefits_perc = (double?)dataTable.Rows[i][6],
+                                                work_home_perc = _whp,
+                                                insurance_perc = _ip,
+                                                pr_tax_perc = _ptp,
+                                                pto_perc =  _pp,
+                                                adj_factor_perc = _afp,
+                                                tot_benefits_perc = _tbp,
 
 
 
@@ -112,7 +126,7 @@ namespace SalesRfp.Controllers
                                         }
                                         catch (Exception ex)
                                         {
-                                            ViewData["ExceptionMessage"] = ex.InnerException.Message;
+                                            ViewData["ExceptionMessage"] = ex.Message;
                                             return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
 
                                         }
@@ -136,12 +150,15 @@ namespace SalesRfp.Controllers
                                     ukgprodCenter.Cost_Center = ukgProdCenterInput[i].Cost_Center;
                                     ukgprodCenter.Shift = ukgProdCenterInput[i].Shift;
                                     ukgprodCenter.Modified_Date = DateTime.Now;
+                                    
 
 
                                 }
                                 var ukgProdModelDomain = mapper.Map<UKGProdCenterModel>(ukgprodCenter);
                                 try {
                                     var result = await userMDSRepository.CreateUKGProdCenterAsync(ukgProdModelDomain);
+                                    ViewData["Success"] = "File uploaded successfully";
+                                  
                                 }
                                 catch(Exception ex) {
                                     ViewData["ExceptionMessage"] = ex.Message;
@@ -149,6 +166,7 @@ namespace SalesRfp.Controllers
                                 } 
                                 
                             }
+                            return Redirect("/GridData?Table_Name=UKG_Production_Centers");
                         }
                     }
                     else
@@ -173,7 +191,8 @@ namespace SalesRfp.Controllers
                                 try
                                 {
                                     var result = await userMDSRepository.CreateCompanyEmployeeBenefitsAsync(companyEmployeeBenefitsDomain);
-
+                                    
+                                     
                                 }
                                 catch (Exception ex)
                                 {
@@ -181,6 +200,7 @@ namespace SalesRfp.Controllers
                                     return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
                                 }
                             }
+                           return  Redirect("/GridData?Table_Name=Company_Employee_Benefits");
                         }
                     }
 
@@ -188,8 +208,9 @@ namespace SalesRfp.Controllers
 
             }
 
-            return Redirect("/GridData?Table_Name=UKG_Production_Centers");
-            //View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
+            return 
+                //Redirect("/GridData?Table_Name=UKG_Production_Centers");
+            View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
         }
 
 

@@ -6,6 +6,8 @@
         public string Plant { get; set; }
         public string Cost_Center { get; set; }
         public int Shift { get; set; }
+        public string Domain { get; set; }  
+        public string Maintained_By { get; set; }
         public string? Created_By { get; set; }
         public DateTime? Created_Date { get; set; }
         public string? Modified_By { get; set; }

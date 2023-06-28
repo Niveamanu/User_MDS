@@ -25,12 +25,17 @@ namespace UserMDS.Repositories
                 result.adj_factor_perc = companyEmployeeBenefitsModel.adj_factor_perc;
                 result.pr_tax_perc = companyEmployeeBenefitsModel.pr_tax_perc;
                 result.tot_benefits_perc = companyEmployeeBenefitsModel.tot_benefits_perc;
+                result.domain = "Labour";
+                result.maintained_by = "Don Hoang";
                 await userMDSDbContext.SaveChangesAsync();
                 return result;  
             }
+            companyEmployeeBenefitsModel.domain = "Labour";
+            companyEmployeeBenefitsModel.maintained_by = "Don Hoang";
             await userMDSDbContext.AddAsync(companyEmployeeBenefitsModel);
 
             await userMDSDbContext.SaveChangesAsync();
+
             return companyEmployeeBenefitsModel;
         }
 
@@ -41,6 +46,8 @@ namespace UserMDS.Repositories
             {
                 return null;
             }
+            uKGProdCenterModel.Domain = "Labour";
+            uKGProdCenterModel.Maintained_By = "Don Hoang";
             await userMDSDbContext.AddAsync(uKGProdCenterModel);
 
             await userMDSDbContext.SaveChangesAsync();

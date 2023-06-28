@@ -14,7 +14,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("UserMDSDbConnect
 builder.Services.AddScoped<IUserMDSRepository, UserMDSRepository>();
 
 builder.Services.AddControllers();
-
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
