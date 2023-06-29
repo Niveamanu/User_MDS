@@ -80,7 +80,7 @@ namespace UserMDS.Controllers
                             {
                                 if (dataTable.Rows[1][0].ToString() == "Plant" && dataTable.Rows[1][1].ToString() == "Cost Center" && dataTable.Rows[1][2].ToString() == "Shift")
                                 {
-                                    return Ok();
+                                    
                                 }
                                 else
                                 {
