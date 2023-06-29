@@ -2,6 +2,7 @@
 using ExcelDataReader;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using UserMDS.Data;
 using UserMDS.Models;
 using UserMDS.Models.DTO;
@@ -23,6 +24,7 @@ namespace UserMDS.Controllers
             this.mapper = mapper;
          
         }
+        
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -74,16 +76,20 @@ namespace UserMDS.Controllers
                             var dataTable = dataSet.Tables[0];
                             int columnCount = reader.FieldCount;
                             dataSource = dataTable.Rows[0][0].ToString();
-                            //template check 
                             if (button == "UKG")
                             {
-                                if(dataTable.Rows[0][0].ToString() != "UKG Production Center")
+                                if (dataTable.Rows[1][0].ToString() == "Plant" && dataTable.Rows[1][1].ToString() == "Cost Center" && dataTable.Rows[1][2].ToString() == "Shift")
                                 {
-                                    ViewData["TemplateMismatch"] ="Please choose the proper template for UKG Production center";
+                                    return Ok();
+                                }
+                                else
+                                {
+                                    ViewData["TemplateMismatch"] = "Please choose the proper template for UKG Production center";
                                     return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
 
                                 }
                             }
+                          
                             if (dataTable != null)
                             {
                                 for (var i = 2; i < dataTable.Rows.Count; i++)
@@ -149,17 +155,18 @@ namespace UserMDS.Controllers
                                     {
                                         try
                                         {
-                                             
+                                            string _miles = dataTable.Rows[i][3]?.ToString();
+                                            double? __miles = string.IsNullOrEmpty(_miles) ? (double?)null : Convert.ToDouble(_miles);
                                             freightMilesInput.Add(new FreightMilesModel
                                             {
-                                                Index = dataTable.Rows[i][0].ToString(),
+                                                Index = dataTable.Rows[i][0]?.ToString(),
                                                 prev_stop_zip =Convert.ToInt32(dataTable.Rows[i][1]) ,
                                                 next_stop_zip = Convert.ToInt32(dataTable.Rows[i][2]),
-                                                miles = Convert.ToDouble(dataTable.Rows[i][3]),
-                                                mileage_src = dataTable.Rows[i][4].ToString(),
-                                                first= dataTable.Rows[i][5].ToString(),
-                                                second= dataTable.Rows[i][6].ToString(),
-                                                revised= DateTime.Parse(dataTable.Rows[i][7].ToString().Replace("/", "-")),
+                                                miles =  __miles,
+                                                mileage_src = dataTable.Rows[i][4]?.ToString(),
+                                                first= dataTable.Rows[i][5]?.ToString(),
+                                                second= dataTable.Rows[i][6]?.ToString(),
+                                                revised= DateTime.Parse(dataTable.Rows[i][7]?.ToString().Replace("/", "-")),
 
 
                                             });
@@ -176,11 +183,14 @@ namespace UserMDS.Controllers
                                     {
                                         try
                                         {
+                                            string _cus_rev = dataTable.Rows[i][2]?.ToString();
+                                            int? __cus_rev = string.IsNullOrEmpty(_cus_rev) ? (int?)null : Convert.ToInt32(_cus_rev);
+
                                             custRevisedInput.Add(new RevisedCustShipToDetailsModel
                                             {
                                                 business_unit =Convert.ToInt32(dataTable.Rows[i][0]),
                                                 cust_no = Convert.ToInt32(dataTable.Rows[i][1]) ,
-                                                cust_no_revised = Convert.ToInt32(dataTable.Rows[i][2]),
+                                                cust_no_revised =  __cus_rev,
 
 
 
@@ -198,14 +208,22 @@ namespace UserMDS.Controllers
                                     {
                                         try
                                         {
+                                            string week_pnw = dataTable.Rows[i][3]?.ToString();
+                                            int? _week_pnw = string.IsNullOrEmpty(week_pnw) ? (int?)null : Convert.ToInt32(week_pnw);
+                                            string week_proj = dataTable.Rows[i][4]?.ToString();
+                                            double? _week_proj = string.IsNullOrEmpty(week_proj) ? (double?)null : Convert.ToDouble(week_proj);
+                                            string week_other = dataTable.Rows[i][5]?.ToString();
+                                            double? _week_other = string.IsNullOrEmpty(week_other) ? (double?)null : Convert.ToDouble(week_other);
+
+
                                             manualKPIMetricsInput.Add(new ManualKPIMetricsValueModel
                                             {
                                                 effective_date_from = DateTime.Parse(dataTable.Rows[i][0].ToString().Replace("/","-")),
                                                 business_unit =Convert.ToInt32(dataTable.Rows[i][1]),
                                                 lhl_loc =  dataTable.Rows[i][2].ToString(),
-                                                weekly_overhead_pnw_eq_fsc_noc = Convert.ToInt32(dataTable.Rows[i][3]),
-                                                weekly_overhead_projection = Convert.ToDouble(dataTable.Rows[i][4]),
-                                                weekly_overhead_other = Convert.ToDouble(dataTable.Rows[i][5])
+                                                weekly_overhead_pnw_eq_fsc_noc = _week_pnw,
+                                                weekly_overhead_projection = _week_proj,
+                                                weekly_overhead_other = _week_other
 
 
 
@@ -237,8 +255,7 @@ namespace UserMDS.Controllers
                                     ukgprodCenter.Plant = ukgProdCenterInput[i].Plant;
                                     ukgprodCenter.Cost_Center = ukgProdCenterInput[i].Cost_Center;
                                     ukgprodCenter.Shift = ukgProdCenterInput[i].Shift;
-                                    ukgprodCenter.Modified_Date = DateTime.Now;
-                                    
+                                     
 
 
                                 }
@@ -392,7 +409,7 @@ namespace UserMDS.Controllers
                                 }
 
                             }
-                            return Redirect("/GridData?Table_Name=Revised_Customer_Ship_To_Details");
+                            return Redirect("/GridData?Table_Name=Manual_KPI_Metrics_Value");
                         }
                     }
                 }
