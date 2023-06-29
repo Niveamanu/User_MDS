@@ -33,11 +33,12 @@ namespace UserMDS.Controllers
         [HttpPost]
         public async Task<IActionResult> Index( IFormFile files, string button)
         {
-          
-            
-
+           
             var ukgProdCenterInput = new List<UKGProdCenterModel>();
             var companyEmployeeBenefitsInput = new List<CompanyEmployeeBenefitsModel>();
+            var freightMilesInput = new List<FreightMilesModel>();
+            var custRevisedInput=new List<RevisedCustShipToDetailsModel>();
+            var manualKPIMetricsInput = new List<ManualKPIMetricsValueModel>();
             var dataSource = "";
             if (files != null)
             {
@@ -107,7 +108,7 @@ namespace UserMDS.Controllers
                                         }
 
                                     }
-                                    else
+                                    else if(dataTable.Rows[0][0].ToString()=="Employee Benefits")
                                     {
                                         try
                                         {
@@ -143,6 +144,80 @@ namespace UserMDS.Controllers
                                             return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
 
                                         }
+                                    }
+                                    else if (dataTable.Rows[0][0].ToString() == "Freight Miles")
+                                    {
+                                        try
+                                        {
+                                             
+                                            freightMilesInput.Add(new FreightMilesModel
+                                            {
+                                                Index = dataTable.Rows[i][0].ToString(),
+                                                prev_stop_zip =Convert.ToInt32(dataTable.Rows[i][1]) ,
+                                                next_stop_zip = Convert.ToInt32(dataTable.Rows[i][2]),
+                                                miles = Convert.ToDouble(dataTable.Rows[i][3]),
+                                                mileage_src = dataTable.Rows[i][4].ToString(),
+                                                first= dataTable.Rows[i][5].ToString(),
+                                                second= dataTable.Rows[i][6].ToString(),
+                                                revised= DateTime.Parse(dataTable.Rows[i][7].ToString().Replace("/", "-")),
+
+
+                                            });
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            ViewData["ExceptionMessage"] = ex.Message;
+                                            return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
+
+                                        }
+
+                                    }
+                                    else if (dataTable.Rows[0][0].ToString() == "Revised Customer Ship To Details")
+                                    {
+                                        try
+                                        {
+                                            custRevisedInput.Add(new RevisedCustShipToDetailsModel
+                                            {
+                                                business_unit =Convert.ToInt32(dataTable.Rows[i][0]),
+                                                cust_no = Convert.ToInt32(dataTable.Rows[i][1]) ,
+                                                cust_no_revised = Convert.ToInt32(dataTable.Rows[i][2]),
+
+
+
+                                            });
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            ViewData["ExceptionMessage"] = ex.Message;
+                                            return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
+
+                                        }
+
+                                    }
+                                    else if (dataTable.Rows[0][0].ToString() == "Manual KPI Metrics Value")
+                                    {
+                                        try
+                                        {
+                                            manualKPIMetricsInput.Add(new ManualKPIMetricsValueModel
+                                            {
+                                                effective_date_from = DateTime.Parse(dataTable.Rows[i][0].ToString().Replace("/","-")),
+                                                business_unit =Convert.ToInt32(dataTable.Rows[i][1]),
+                                                lhl_loc =  dataTable.Rows[i][2].ToString(),
+                                                weekly_overhead_pnw_eq_fsc_noc = Convert.ToInt32(dataTable.Rows[i][3]),
+                                                weekly_overhead_projection = Convert.ToDouble(dataTable.Rows[i][4]),
+                                                weekly_overhead_other = Convert.ToDouble(dataTable.Rows[i][5])
+
+
+
+                                            });
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            ViewData["ExceptionMessage"] = ex.Message;
+                                            return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
+
+                                        }
+
                                     }
 
                                 }
@@ -182,7 +257,7 @@ namespace UserMDS.Controllers
                             return Redirect("/GridData?Table_Name=UKG_Production_Centers");
                         }
                     }
-                    else
+                    else if (dataSource == "Employee Benefits")
                     {
                         if (companyEmployeeBenefitsInput != null && companyEmployeeBenefitsInput.Count > 0)
                         {
@@ -216,7 +291,110 @@ namespace UserMDS.Controllers
                            return  Redirect("/GridData?Table_Name=Company_Employee_Benefits");
                         }
                     }
+                    else if (dataSource == "Freight Miles")
+                    {
+                        if (freightMilesInput != null && freightMilesInput.Count > 0)
+                        {
+                            for (int i = 0; i < freightMilesInput.Count; i++)
+                            {
+                                var freightMiles = new AddFreightMilesDTO();
+                                {
+                                    freightMiles.Index = freightMilesInput[i].Index;
+                                    freightMiles.prev_stop_zip = freightMilesInput[i].prev_stop_zip;
+                                    freightMiles.next_stop_zip = freightMilesInput[i].next_stop_zip;
+                                    freightMiles.miles = freightMilesInput[i].miles;
+                                    freightMiles.mileage_src = freightMilesInput[i].mileage_src;
+                                    freightMiles.first = freightMilesInput[i].first;
+                                    freightMiles.second = freightMilesInput[i].second;
+                                    freightMiles.revised = freightMilesInput[i].revised;
 
+
+
+                                }
+                                var freightMilesDomain = mapper.Map<FreightMilesModel>(freightMiles);
+                                try
+                                {
+                                    var result = await userMDSRepository.CreateFreightMilesAsync(freightMilesDomain);
+                                    ViewData["Success"] = "File uploaded successfully";
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    ViewData["ExceptionMessage"] = ex.Message;
+                                    return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
+                                }
+
+                            }
+                            return Redirect("/GridData?Table_Name=Freight_Miles");
+                        }
+                    }
+                    else if (dataSource == "Revised Customer Ship To Details")
+                    {
+                        if (custRevisedInput != null && custRevisedInput.Count > 0)
+                        {
+                            for (int i = 0; i < custRevisedInput.Count; i++)
+                            {
+                                var custRevised = new RevisedCustShipToDetailsModel();
+                                {
+                                    custRevised.business_unit = custRevisedInput[i].business_unit;
+                                    custRevised.cust_no = custRevisedInput[i].cust_no;
+                                    custRevised.cust_no_revised = custRevisedInput[i].cust_no_revised;
+
+
+
+                                }
+                                var custRevisedDomain = mapper.Map<RevisedCustShipToDetailsModel>(custRevised);
+                                try
+                                {
+                                    var result = await userMDSRepository.CreateRevisedCustomerAsync(custRevisedDomain);
+                                    ViewData["Success"] = "File uploaded successfully";
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    ViewData["ExceptionMessage"] = ex.Message;
+                                    return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
+                                }
+
+                            }
+                            return Redirect("/GridData?Table_Name=Revised_Customer_Ship_To_Details");
+                        }
+                    }
+                    else if (dataSource == "Manual KPI Metrics Value")
+                    {
+                        if (manualKPIMetricsInput != null && manualKPIMetricsInput.Count > 0)
+                        {
+                            for (int i = 0; i < manualKPIMetricsInput.Count; i++)
+                            {
+                                var manualKPIMetrics = new ManualKPIMetricsValueModel();
+                                {
+                                    manualKPIMetrics.effective_date_from = manualKPIMetricsInput[i].effective_date_from;
+                                    manualKPIMetrics.business_unit = manualKPIMetricsInput[i].business_unit;
+                                    manualKPIMetrics.lhl_loc = manualKPIMetricsInput[i].lhl_loc;
+                                    manualKPIMetrics.weekly_overhead_pnw_eq_fsc_noc = manualKPIMetricsInput[i].weekly_overhead_pnw_eq_fsc_noc;
+                                    manualKPIMetrics.weekly_overhead_other = manualKPIMetricsInput[i].weekly_overhead_other;
+                                    manualKPIMetrics.weekly_overhead_projection = manualKPIMetricsInput[i].weekly_overhead_projection;
+
+
+
+                                }
+                                var manualKPIDomain = mapper.Map<ManualKPIMetricsValueModel>(manualKPIMetrics);
+                                try
+                                {
+                                    var result = await userMDSRepository.CreateManualKPIMetricsValueAsync(manualKPIDomain);
+                                    ViewData["Success"] = "File uploaded successfully";
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    ViewData["ExceptionMessage"] = ex.Message;
+                                    return View(await userMDSDbContext.User_Maintenance_Master_Data.ToListAsync());
+                                }
+
+                            }
+                            return Redirect("/GridData?Table_Name=Revised_Customer_Ship_To_Details");
+                        }
+                    }
                 }
 
             }

@@ -39,6 +39,41 @@ namespace UserMDS.Repositories
             return companyEmployeeBenefitsModel;
         }
 
+        public async Task<FreightMilesModel> CreateFreightMilesAsync(FreightMilesModel freightMilesModel)
+        {
+            //var result = userMDSDbContext.Freight_Miles.FirstOrDefault(x => x.prev_stop_zip == uKGProdCenterModel.Plant && x.Cost_Center == uKGProdCenterModel.Cost_Center && x.Shift == uKGProdCenterModel.Shift);
+            //if (result != null)
+            //{
+            //    return null;
+            //}
+            freightMilesModel.domain = "Transportation";
+            freightMilesModel.maintained_by = "Adam Bonser";
+            await userMDSDbContext.AddAsync(freightMilesModel);
+
+            await userMDSDbContext.SaveChangesAsync();
+            return freightMilesModel;
+        }
+
+        public async Task<ManualKPIMetricsValueModel> CreateManualKPIMetricsValueAsync(ManualKPIMetricsValueModel manualKPIMetricsValueModel)
+        {
+            manualKPIMetricsValueModel.domain = "Transportation";
+            manualKPIMetricsValueModel.maintained_by = "Adam Bonser";
+            await userMDSDbContext.AddAsync(manualKPIMetricsValueModel);
+
+            await userMDSDbContext.SaveChangesAsync();
+            return manualKPIMetricsValueModel;
+        }
+
+        public async Task<RevisedCustShipToDetailsModel> CreateRevisedCustomerAsync(RevisedCustShipToDetailsModel revisedCustShipToDetailsModel)
+        {
+            revisedCustShipToDetailsModel.domain = "Transportation";
+            revisedCustShipToDetailsModel.maintained_by = "Adam Bonser";
+            await userMDSDbContext.AddAsync(revisedCustShipToDetailsModel);
+
+            await userMDSDbContext.SaveChangesAsync();
+            return revisedCustShipToDetailsModel;
+        }
+
         public async Task<UKGProdCenterModel?> CreateUKGProdCenterAsync(UKGProdCenterModel uKGProdCenterModel)
         {
             var result = userMDSDbContext.UKG_Production_Centers.FirstOrDefault(x=>x.Plant==uKGProdCenterModel.Plant&&x.Cost_Center==uKGProdCenterModel.Cost_Center&&x.Shift==uKGProdCenterModel.Shift);

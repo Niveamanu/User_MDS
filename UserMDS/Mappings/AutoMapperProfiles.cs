@@ -10,6 +10,9 @@ namespace UserMDS.Mappings
         {
             CreateMap<UKGProdCenterModel, AddUKGProdCenterDTO>().ReverseMap();
             CreateMap<CompanyEmployeeBenefitsModel, AddCompanyEmployeeBenefitsDTO>().ReverseMap();
+            CreateMap<FreightMilesModel, AddFreightMilesDTO>().ReverseMap();
+            CreateMap<RevisedCustShipToDetailsModel, AddRevisedCustToDetailsDTO>().ReverseMap();
+            CreateMap<ManualKPIMetricsValueModel, AddManualKPIMtericsValueDTO>().ReverseMap();
         }
     }
 }

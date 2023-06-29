@@ -7,5 +7,12 @@ namespace UserMDS.Repositories
     {
         Task<UKGProdCenterModel> CreateUKGProdCenterAsync(UKGProdCenterModel UKGProdCenterModel);
         Task<CompanyEmployeeBenefitsModel> CreateCompanyEmployeeBenefitsAsync(CompanyEmployeeBenefitsModel companyEmployeeBenefitsModel);
+
+        Task<FreightMilesModel> CreateFreightMilesAsync(FreightMilesModel freightMilesModel);
+        Task<RevisedCustShipToDetailsModel> CreateRevisedCustomerAsync(RevisedCustShipToDetailsModel revisedCustShipToDetailsModel);
+
+        Task<ManualKPIMetricsValueModel> CreateManualKPIMetricsValueAsync(ManualKPIMetricsValueModel manualKPIMetricsValueModel);
+
+
     }
 }

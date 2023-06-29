@@ -13,13 +13,27 @@
                 @await Html.PartialAsync("_UKGDataGrid")
                 ;
             }
-            else
+            else if(dataSource=="Company_Employee_Benefits")
             {
                 @await Html.PartialAsync("_CompanyEmployeeDataGrid")
                 ;
             }
-            
-                
+            else if(dataSource=="Freight_Miles")
+            {
+                @await Html.PartialAsync("_FreightMiles")
+                ;
+            }
+            else if (dataSource == "Revised_Customer_Ship_To_Details")
+            {
+                @await Html.PartialAsync("_RevisedCustShipToDetails")
+                ;
+            }
+            else
+            {
+                @await Html.PartialAsync("_ManualKPIMetricsValue")
+                ;
+            }
+
             }
 
         </div>

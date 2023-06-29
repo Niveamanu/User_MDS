@@ -25,10 +25,24 @@ namespace UserMDS.Controllers
             {
                 return View(await userMDSDbContext.UKG_Production_Centers.ToListAsync());
             }
-            else
+            else if(dataSource=="Company_Employee_Benefits")
             {
                 return View(await userMDSDbContext.Company_Employee_Benefits.ToListAsync());
             }
+            else  if(dataSource == "Freight_Miles")
+            {
+                return View(await userMDSDbContext.Freight_Miles.ToListAsync());
+            }
+            else if( dataSource == "Revised_Customer_Ship_To_Details")
+            {
+                return View(await userMDSDbContext.Revised_Customer_Ship_To_Details.ToListAsync());
+            }
+            else
+            {
+                return View(await userMDSDbContext.Manual_KPI_Metrics_Value.ToListAsync());
+
+            }
+
         }
         public async Task<IActionResult> Index(string Table_Name)
         {
@@ -42,11 +56,32 @@ namespace UserMDS.Controllers
                     result.UKGProdCenters = userDbContext.ToList();
                     return View(result);
                 }
-                else
+                else if (Table_Name == "Company_Employee_Benefits")
                 {
                     var result = new UserMaintenanceModel();
                     var userDbContext = await userMDSDbContext.Company_Employee_Benefits.ToListAsync();
                     result.CompanyEmployeesBenefits = userDbContext.ToList();
+                    return View(result);
+                }
+                else if (Table_Name == "Freight_Miles")
+                {
+                    var result = new UserMaintenanceModel();
+                    var userDbContext = await userMDSDbContext.Freight_Miles.ToListAsync();
+                    result.FreightMiles = userDbContext.ToList();
+                    return View(result);
+                }
+                else if(Table_Name == "Revised_Customer_Ship_To_Details")
+                {
+                    var result = new UserMaintenanceModel();
+                    var userDbContext = await userMDSDbContext.Revised_Customer_Ship_To_Details.ToListAsync();
+                    result.revisedCustShipToDetails = userDbContext.ToList();
+                    return View(result);
+                }
+                else
+                {
+                    var result = new UserMaintenanceModel();
+                    var userDbContext = await userMDSDbContext.Manual_KPI_Metrics_Value.ToListAsync();
+                    result.manualKPIMetricsValues = userDbContext.ToList();
                     return View(result);
                 }
             }

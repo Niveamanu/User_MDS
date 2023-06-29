@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @using UserMDS.Models
-@model IEnumerable<CompanyEmployeeBenefitsModel>
+@model IEnumerable<ManualKPIMetricsValueModel>
 @{
     Layout = null;
 }
@@ -27,22 +27,21 @@
 
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade  overflow-auto show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-            <table class="CompanyEmployeeBenefits table table-hover">
+            <table class="ManualKPIMetricsValue table table-hover">
                 <thead class="thead-light">
                     <tr>
                         <th>S.No</th>
-                        <th>Plant Unique</th>
-                        <th>Work Home Perc</th>
-                        <th>Insurance Perc</th>
-                        <th>Pr Tax perc</th>
-                        <th>pto perc</th>
-                        <th>adj factor perc</th>
-                        <th>tot benefits perc</th>
+                        <th>Effective Date From</th>
+                        <th>Business Unit</th>
+                        <th> LHL LOC</th>
+                        <th>Weekly Overhead PNW EQ FSC NOC</th>
+                        <th>Weekly Overhead Other</th>
+                        <th>Weekly Overhead Projection</th>
                         <th>Domain</th>
                         <th>Maintained By</th>
                         <th>Created Date</th>
                         <th>Modified Date</th>
-                   @*     <th>Created By</th>*@
+                        @*     <th>Created By</th>*@
 
 
                     </tr>
@@ -50,25 +49,24 @@
                 @{
 
                     int counter = 1;
-                @foreach (CompanyEmployeeBenefitsModel result in Model)
-                {
-                    <tr>
-                    <td>@counter</td>
-                        <td>@result.plant_unique</td>
-                        <td>@result.work_home_perc</td>
-                        <td>@result.insurance_perc</td>
-                        <td>@result.pr_tax_perc</td>
-                        <td>@result.pto_perc</td>
-                        <td>@result.adj_factor_perc</td>
-                        <td>@result.tot_benefits_perc</td>
+                    @foreach (ManualKPIMetricsValueModel result in Model)
+                    {
+                        <tr>
+                            <td>@counter</td>
+                            <td>@result.effective_date_from</td>
+                            <td>@result.business_unit</td>
+                            <td>@result.lhl_loc</td>
+                            <td>@result.weekly_overhead_pnw_eq_fsc_noc</td>
+                            <td>@result.weekly_overhead_other</td>
+                            <td>@result.weekly_overhead_projection</td>
                             <td>@result.domain</td>
                             <td>@result.maintained_by</td>
                             <td>@result.created_date</td>
                             <td>@result.modified_date</td>
-                           @* <td>@result.created_by</td>*@
+                            @* <td>@result.created_by</td>*@
 
 
-                    </tr>
+                        </tr>
                         counter++;
                     }
                 }
@@ -81,7 +79,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        let table = new DataTable('.CompanyEmployeeBenefits', {
+        let table = new DataTable('.ManualKPIMetricsValue', {
             dom: 'Bfrtip',
             buttons: [
 
@@ -96,4 +94,3 @@
 
 </script>
 
- 
